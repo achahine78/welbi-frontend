@@ -1,11 +1,25 @@
-import { Table, Tag } from "antd";
+import { List, Modal, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import SharedDataContext from "../context/SharedDataContext";
 
+const getResidentNames = (residents: any, residentsInfo: any) => {
+  return residents?.map((resident: any) => {
+    const matchingResidentInfo = residentsInfo.find(
+      (info: any) => info.id === resident.residentId
+    );
+    return matchingResidentInfo ? matchingResidentInfo.name : null;
+  });
+};
+
 const ProgramsList = () => {
-  const { programs } = useContext(SharedDataContext);
+  const { programs, residents } = useContext(SharedDataContext);
+  const [showParticipantsModal, setShowParticipantsModal] = useState(false);
+  const [
+    selectedProgramForParticipantsModal,
+    setSelectedProgramForParticipantsModal,
+  ] = useState<null | any>(null);
   const tableColumns: ColumnsType<object> = [
     {
       title: "Name",
@@ -39,6 +53,20 @@ const ProgramsList = () => {
       title: "Date",
       dataIndex: "start",
       render: (start) => <span>{dayjs(start).format("D MMMM, YYYY")}</span>,
+    },
+    {
+      title: "Participants",
+      dataIndex: "",
+      render: (_, data) => (
+        <a
+          onClick={() => {
+            setShowParticipantsModal(true);
+            setSelectedProgramForParticipantsModal(data);
+          }}
+        >
+          View Participants
+        </a>
+      ),
     },
     {
       title: "Tags",
@@ -104,6 +132,29 @@ const ProgramsList = () => {
   return (
     <div style={{ width: "100%" }}>
       <Table dataSource={programs} columns={tableColumns} pagination={false} />
+      <Modal
+        title={`${selectedProgramForParticipantsModal?.name} Participants`}
+        open={showParticipantsModal}
+        onCancel={() => {
+          setShowParticipantsModal(false);
+          setSelectedProgramForParticipantsModal(null);
+        }}
+        footer={null}
+        destroyOnClose
+      >
+        <List
+          bordered
+          dataSource={getResidentNames(
+            selectedProgramForParticipantsModal?.attendance,
+            residents
+          )}
+          renderItem={(item: string) => (
+            <List.Item>
+              <div>{item}</div>
+            </List.Item>
+          )}
+        />
+      </Modal>
     </div>
   );
 };
