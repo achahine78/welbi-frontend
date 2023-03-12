@@ -1,16 +1,20 @@
 import { Route, Routes } from "react-router-dom";
+import SideMenu from "./components/SideMenu";
 import { SharedDataProvider } from "./context/SharedDataContext";
 import AuthGuard from "./guards/AuthGuard";
+import ProgramsList from "./pages/ProgramsList";
+import ResidentsList from "./pages/ResidentsList";
 
 function App() {
   return (
     <AuthGuard>
-      <div className="App">
+      <div style={{ display: "flex" }}>
+        <SideMenu />
         <SharedDataProvider>
           <Routes>
-            <Route path="/" element={<span>base</span>} />
-            <Route path="/residents" element={<span>residents</span>} />
-            <Route path="/programs" element={<span>programs</span>} />
+            <Route path="/" element={<ResidentsList />} />
+            <Route path="/residents" element={<ResidentsList />} />
+            <Route path="/programs" element={<ProgramsList />} />
           </Routes>
         </SharedDataProvider>
       </div>

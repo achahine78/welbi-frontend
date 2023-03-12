@@ -28,11 +28,9 @@ const SharedDataProvider = ({ children }: Props) => {
 
   useEffect(() => {
     privateAxios.get("/residents").then(({ data }) => {
-      console.log("residents: ", data);
       setResidents(data);
     });
     privateAxios.get("/programs").then(({ data }) => {
-      console.log("programs: ", data);
       setPrograms(data);
     });
   }, []);
