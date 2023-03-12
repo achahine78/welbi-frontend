@@ -80,7 +80,7 @@ const ResidentsList = () => {
       ),
     },
   ];
-  console.log("residents: ", residents);
+
   return (
     <div style={{ width: "100%" }}>
       <Space wrap style={{ padding: "16px" }}>

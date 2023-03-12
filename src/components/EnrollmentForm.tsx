@@ -15,8 +15,6 @@ const EnrollmentForm = ({ onSubmitSuccess }: Props) => {
   const [selectedStatus, setSelectedStatus] = useState();
   const [messageApi, contextHolder] = message.useMessage();
   const onSubmit = () => {
-    console.log("selectedProgram: ", selectedProgram);
-    console.log("selectedResident: ", selectedResident);
     privateAxios
       .post(`programs/${selectedProgram}/attend`, {
         residentId: selectedResident,

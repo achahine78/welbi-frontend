@@ -133,7 +133,7 @@ const ProgramsList = () => {
       render: (isRepeated) => <span>{isRepeated ? "Yes" : "No"}</span>,
     },
   ];
-  console.log("programs: ", programs);
+
   return (
     <div style={{ width: "100%" }}>
       <Space wrap style={{ padding: "16px" }}>
