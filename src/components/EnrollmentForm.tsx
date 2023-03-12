@@ -8,7 +8,8 @@ type Props = {
 };
 
 const EnrollmentForm = ({ onSubmitSuccess }: Props) => {
-  const { programs, residents } = useContext(SharedDataContext);
+  const { programs, residents, updateAttendance } =
+    useContext(SharedDataContext);
   const [selectedProgram, setSelectedProgram] = useState();
   const [selectedResident, setSelectedResident] = useState();
   const [selectedStatus, setSelectedStatus] = useState();
@@ -21,8 +22,8 @@ const EnrollmentForm = ({ onSubmitSuccess }: Props) => {
         residentId: selectedResident,
         status: selectedStatus,
       })
-      .then(({ data }) => {
-        console.log("data: ", data);
+      .then(() => {
+        updateAttendance(selectedProgram, selectedResident, selectedStatus);
         messageApi.open({
           type: "success",
           content: "Resident successfully enrolled!",

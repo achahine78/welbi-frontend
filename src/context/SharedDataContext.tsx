@@ -6,11 +6,17 @@ const SharedDataContext = React.createContext<{
   residents: any[];
   appendResident: (value: any) => null | void;
   appendProgram: (value: any) => null | void;
+  updateAttendance: (
+    programId: number | undefined,
+    residentId: number | undefined,
+    status: string | undefined
+  ) => null | void;
 }>({
   programs: [],
   residents: [],
   appendResident: () => null,
   appendProgram: () => null,
+  updateAttendance: () => null,
 });
 
 type Props = {
@@ -26,6 +32,51 @@ const SharedDataProvider = ({ children }: Props) => {
   const appendProgram = (newProgram: any) =>
     setPrograms([...programs, newProgram]);
 
+  const updateAttendance = (
+    programId: number | undefined,
+    residentId: number | undefined,
+    status: string | undefined
+  ) => {
+    const updatedResidents = residents.map((resident: any) => {
+      if (resident.id === residentId) {
+        return {
+          ...resident,
+          attendance: [
+            ...resident.attendance,
+            {
+              programId,
+              residentId,
+              status,
+            },
+          ],
+        };
+      }
+
+      return resident;
+    });
+
+    const updatedPrograms = programs.map((program: any) => {
+      if (program.id === programId) {
+        return {
+          ...program,
+          attendance: [
+            ...program.attendance,
+            {
+              programId,
+              residentId,
+              status,
+            },
+          ],
+        };
+      }
+
+      return program;
+    });
+
+    setResidents(updatedResidents);
+    setPrograms(updatedPrograms);
+  };
+
   useEffect(() => {
     privateAxios.get("/residents").then(({ data }) => {
       setResidents(data);
@@ -37,7 +88,13 @@ const SharedDataProvider = ({ children }: Props) => {
 
   return (
     <SharedDataContext.Provider
-      value={{ residents, programs, appendResident, appendProgram }}
+      value={{
+        residents,
+        programs,
+        appendResident,
+        appendProgram,
+        updateAttendance,
+      }}
     >
       {children}
     </SharedDataContext.Provider>
