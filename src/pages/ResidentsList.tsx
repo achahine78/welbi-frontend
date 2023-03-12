@@ -2,6 +2,7 @@ import { Button, List, Modal, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
+import ResidentCreationForm from "../components/ResidentCreationForm";
 import SharedDataContext from "../context/SharedDataContext";
 
 const getProgramNames = (programs: any, programsInfo: any) => {
@@ -15,6 +16,8 @@ const getProgramNames = (programs: any, programsInfo: any) => {
 
 const ResidentsList = () => {
   const { residents, programs } = useContext(SharedDataContext);
+  const [showResidentCreationModal, setShowResidentCreationModal] =
+    useState(false);
   const [showProgramsModal, setShowProgramsModal] = useState(false);
   const [
     selectedResidentForProgramsModal,
@@ -79,7 +82,12 @@ const ResidentsList = () => {
   return (
     <div style={{ width: "100%" }}>
       <Space wrap style={{ padding: "16px" }}>
-        <Button type="primary">Add Resident</Button>
+        <Button
+          type="primary"
+          onClick={() => setShowResidentCreationModal(true)}
+        >
+          Add Resident
+        </Button>
         <Button type="default">Enroll In Program</Button>
       </Space>
       <Table dataSource={residents} columns={tableColumns} pagination={false} />
@@ -104,6 +112,21 @@ const ResidentsList = () => {
               <div>{item}</div>
             </List.Item>
           )}
+        />
+      </Modal>
+      <Modal
+        title="Add Resident"
+        open={showResidentCreationModal}
+        onCancel={() => {
+          setShowResidentCreationModal(false);
+        }}
+        footer={null}
+        destroyOnClose
+      >
+        <ResidentCreationForm
+          onSubmitSuccess={() => {
+            setShowResidentCreationModal(false);
+          }}
         />
       </Modal>
     </div>
