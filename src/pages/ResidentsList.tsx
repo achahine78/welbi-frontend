@@ -2,6 +2,7 @@ import { Button, List, Modal, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
+import EnrollmentForm from "../components/EnrollmentForm";
 import ResidentCreationForm from "../components/ResidentCreationForm";
 import SharedDataContext from "../context/SharedDataContext";
 
@@ -18,6 +19,7 @@ const ResidentsList = () => {
   const { residents, programs } = useContext(SharedDataContext);
   const [showResidentCreationModal, setShowResidentCreationModal] =
     useState(false);
+  const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const [showProgramsModal, setShowProgramsModal] = useState(false);
   const [
     selectedResidentForProgramsModal,
@@ -88,7 +90,9 @@ const ResidentsList = () => {
         >
           Add Resident
         </Button>
-        <Button type="default">Enroll In Program</Button>
+        <Button type="default" onClick={() => setShowEnrollmentModal(true)}>
+          Enroll In Program
+        </Button>
       </Space>
       <Table dataSource={residents} columns={tableColumns} pagination={false} />
       <Modal
@@ -126,6 +130,21 @@ const ResidentsList = () => {
         <ResidentCreationForm
           onSubmitSuccess={() => {
             setShowResidentCreationModal(false);
+          }}
+        />
+      </Modal>
+      <Modal
+        title="Enroll In Program"
+        open={showEnrollmentModal}
+        onCancel={() => {
+          setShowEnrollmentModal(false);
+        }}
+        footer={null}
+        destroyOnClose
+      >
+        <EnrollmentForm
+          onSubmitSuccess={() => {
+            setShowEnrollmentModal(false);
           }}
         />
       </Modal>
