@@ -1,4 +1,4 @@
-import { List, Modal, Table } from "antd";
+import { Button, List, Modal, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
@@ -78,6 +78,10 @@ const ResidentsList = () => {
   console.log("residents: ", residents);
   return (
     <div style={{ width: "100%" }}>
+      <Space wrap style={{ padding: "16px" }}>
+        <Button type="primary">Add Resident</Button>
+        <Button type="default">Enroll In Program</Button>
+      </Space>
       <Table dataSource={residents} columns={tableColumns} pagination={false} />
       <Modal
         title={`${selectedResidentForProgramsModal?.name} Programs`}

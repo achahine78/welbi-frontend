@@ -1,7 +1,8 @@
-import { List, Modal, Table, Tag } from "antd";
+import { Button, List, Modal, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
+import ProgramCreationForm from "../components/ProgramCreationForm";
 import SharedDataContext from "../context/SharedDataContext";
 
 const getResidentNames = (residents: any, residentsInfo: any) => {
@@ -15,6 +16,8 @@ const getResidentNames = (residents: any, residentsInfo: any) => {
 
 const ProgramsList = () => {
   const { programs, residents } = useContext(SharedDataContext);
+  const [showProgramCreationModal, setShowProgramCreationModal] =
+    useState(false);
   const [showParticipantsModal, setShowParticipantsModal] = useState(false);
   const [
     selectedProgramForParticipantsModal,
@@ -73,7 +76,7 @@ const ProgramsList = () => {
       dataIndex: "tags",
       render: (tags) => (
         <div>
-          {tags.map((tag: string) => (
+          {tags?.map((tag: string) => (
             <Tag key={tag}>{tag}</Tag>
           ))}
         </div>
@@ -89,7 +92,7 @@ const ProgramsList = () => {
       dataIndex: "facilitators",
       render: (facilitators) => (
         <div>
-          {facilitators.map((facilitator: string) => (
+          {facilitators?.map((facilitator: string) => (
             <Tag key={facilitator}>{facilitator}</Tag>
           ))}
         </div>
@@ -100,7 +103,7 @@ const ProgramsList = () => {
       dataIndex: "levelOfCare",
       render: (levels) => (
         <div>
-          {levels.map((level: string) => (
+          {levels?.map((level: string) => (
             <Tag key={level}>{level}</Tag>
           ))}
         </div>
@@ -111,7 +114,7 @@ const ProgramsList = () => {
       dataIndex: "hobbies",
       render: (hobbies) => (
         <div>
-          {hobbies.map((hobby: string) => (
+          {hobbies?.map((hobby: string) => (
             <Tag key={hobby}>{hobby}</Tag>
           ))}
         </div>
@@ -131,6 +134,15 @@ const ProgramsList = () => {
   console.log("programs: ", programs);
   return (
     <div style={{ width: "100%" }}>
+      <Space wrap style={{ padding: "16px" }}>
+        <Button
+          type="primary"
+          onClick={() => setShowProgramCreationModal(true)}
+        >
+          Add Program
+        </Button>
+        <Button type="default">Enroll Resident</Button>
+      </Space>
       <Table dataSource={programs} columns={tableColumns} pagination={false} />
       <Modal
         title={`${selectedProgramForParticipantsModal?.name} Participants`}
@@ -153,6 +165,21 @@ const ProgramsList = () => {
               <div>{item}</div>
             </List.Item>
           )}
+        />
+      </Modal>
+      <Modal
+        title="Add Program"
+        open={showProgramCreationModal}
+        onCancel={() => {
+          setShowProgramCreationModal(false);
+        }}
+        footer={null}
+        destroyOnClose
+      >
+        <ProgramCreationForm
+          onSubmitSuccess={() => {
+            setShowProgramCreationModal(false);
+          }}
         />
       </Modal>
     </div>
